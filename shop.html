@@ -26,6 +26,111 @@
         </div>
     </nav>
 
+    <script>
+        const navigation = [
+    {
+
+        links: ["Home", "Shop", "Plant Care", "Blogs"],
+        button: "Login",
+        bars: "fa-solid fa-bars"
+    }
+];
+
+function addNavigation() {
+    let result = "";
+
+    navigation.forEach(item => {
+        item.links.forEach(link => {
+            result += `
+                        <li class="nav__item">
+                            <a href="#">${link}</a>
+                        </li>
+                    `;
+        });
+
+        result += `
+                    <li class="nav__item">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <button class="btn">
+                            <i class="fa-solid fa-right-to-bracket"></i>
+                            ${item.button}
+                        </button>
+                    </li>
+                `;
+    });
+
+    document.getElementById("nav__list").innerHTML = result;
+}
+
+addNavigation();
+
+const bars = document.getElementById("bars");
+const navList = document.getElementById("nav__list");
+
+bars.addEventListener("click", (e) => {
+    e.stopPropagation();
+    navList.classList.toggle("active");
+
+
+    const barsIcon = bars.querySelector("i");
+    if (navList.classList.contains("active")) {
+        barsIcon.classList.remove("fa-bars");
+        barsIcon.classList.add("fa-xmark");
+
+        document.body.style.overflow = "hidden";
+    } else {
+        barsIcon.classList.remove("fa-xmark");
+        barsIcon.classList.add("fa-bars");
+        document.body.style.overflow = "";
+    }
+});
+
+
+document.addEventListener("click", function (event) {
+    if (window.innerWidth <= 768 &&
+        navList.classList.contains("active") &&
+        !navList.contains(event.target) &&
+        !bars.contains(event.target)) {
+
+        navList.classList.remove("active");
+        const barsIcon = bars.querySelector("i");
+        barsIcon.classList.remove("fa-xmark");
+        barsIcon.classList.add("fa-bars");
+        document.body.style.overflow = "";
+    }
+});
+
+document.addEventListener("click", function (event) {
+    if (window.innerWidth <= 768 &&
+        navList.classList.contains("active") &&
+        (event.target.tagName === 'A' ||
+            event.target.closest('a') ||
+            event.target.tagName === 'BUTTON' ||
+            event.target.closest('button'))) {
+
+
+        setTimeout(() => {
+            navList.classList.remove("active");
+            const barsIcon = bars.querySelector("i");
+            barsIcon.classList.remove("fa-xmark");
+            barsIcon.classList.add("fa-bars");
+            document.body.style.overflow = "";
+        }, 300);
+    }
+});
+
+window.addEventListener("resize", function () {
+    if (window.innerWidth > 768 && navList.classList.contains("active")) {
+        navList.classList.remove("active");
+        const barsIcon = bars.querySelector("i");
+        barsIcon.classList.remove("fa-xmark");
+        barsIcon.classList.add("fa-bars");
+        document.body.style.overflow = "";
+    }
+});
+
+    </script>
 
     <!-- ================product==================== -->
 
@@ -127,19 +232,305 @@
 <div class="description">
     <div class="container">
         <div class="description__container">
-             <ul class="description__list">
-
+             <ul class="description__list" id="description__list">
              </ul>
         </div>
     </div>
 </div>
 
+<script>
+const addDescription = [
+    {
+        title: ["Product Description", "Reviews (19)"],
+        text: "The ceramic cylinder planters come with a wooden stand to help elevate your plants off the ground. The ceramic cylinder planters come with a wooden stand to help elevate your plants off the ground. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam fringilla augue nec est tristique auctor. Donec non est at libero vulputate rutrum. Morbi ornare lectus quis justo gravida semper. Nulla tellus mi, vulputate adipiscing cursus eu, suscipit id nulla.Pellentesque aliquet, sem eget laoreet ultrices, ipsum metus feugiat sem, quis fermentum turpis eros eget velit. Donec ac tempus ante. Fusce ultricies massa massa. Fusce aliquam, purus eget sagittis vulputate, sapien libero hendrerit est, sed commodo augue nisi non neque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempor, lorem et placerat vestibulum, metus nisi posuere nisl, in accumsan elit odio quis mi. Cras neque metus, consequat et blandit et, luctus a nunc. Etiam gravida vehicula tellus, in imperdiet ligula euismod eget. The ceramic cylinder planters come with a wooden stand to help elevate your plants off the ground. ",
+        sections: [
+            {
+                title: "Living Room:",
+                text: "The ceramic cylinder planters come with a wooden stand to help elevate your plants off the ground. The ceramic cylinder planters come with a wooden stand to help elevate your plants off the ground. Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+            },
+            {
+                title: "Dining Room:",
+                text: "The benefits of houseplants are endless. In addition to cleaning the air of harmful toxins, they can help to improve your mood, reduce stress and provide you with better sleep. Fill every room of your home with houseplants and their restorative qualities will improve your life."
+            },
+            {
+                title: "Office:",
+                text: "The ceramic cylinder planters come with a wooden stand to help elevate your plants off the ground. The ceramic cylinder planters come with a wooden stand to help elevate your plants off the ground. Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+            }
+        ]
+    }
+];
+
+function addProducs() {
+    let result = ""; 
+
+    addDescription.forEach((page) => {
+        result += `<li class="wrap__item">`;
+
+       
+        page.title.forEach(t => {
+            result += `<h1 class="wrap__title">${t}</h1>`;
+        });
+
+        result += `<p class="wrap__text">${page.text}</p>`;
+
+        
+        page.sections.forEach(section => {
+            result += `<h2 class="wrap__title1">${section.title}</h2>`;
+            result += `<p class="wrap__text1">${section.text}</p>`;
+        });
+
+        result += `</li>`;
+    });
+
+    document.getElementById("description__list").innerHTML = result;
+}
+
+
+document.addEventListener("DOMContentLoaded", addProducs);
+</script>
 
 
 
+<!-- ==================================releted======================= -->
 
 
+<div class="releted">
+    <div class="container">
+        <div class="releted__container">
+            <h1 class="releted__subtitle">Releted Products</h1>
+            <hr class="hr">
+            <ul class="releted__list" id="releted__list">
+            </ul>
+        </div>
+    </div>
+</div>
 
+
+<script>
+    const addReleted = [
+    { img: "images/d.png", title: "Beach Spider Lily", text: "$129.00" },
+    { img: "images/e.png", title: "Blushing Bromeliad", text: "$139.00" },
+    { img: "images/f.png", title: "Aluminum Plant", text: "$179.00" },
+    { img: "images/g.png", title: "Bird's Nest Fern", text: "$99.00" },
+    { img: "images/i.png", title: "Chinese Evergreen", text: "$39.00" },
+];
+
+function addUser() {
+    let result = ""; 
+    addReleted.forEach((user) => {
+        result += `
+            <li class="releted__item">
+                <img class="releted__img" src="${user.img}" alt="${user.title}">
+                <h3 class="releted__title">${user.title}</h3>
+                <p class="releted__text">${user.text}</p>
+            </li>
+        `;
+    });
+
+    document.getElementById("releted__list").innerHTML = result;
+}
+
+document.addEventListener("DOMContentLoaded", addUser);
+
+</script>
+
+
+<!-- ==========================aside====================== -->
+
+ <aside class="aside">
+        <div class="container">
+            <div class="aside__container">
+                <ul class="aside__list" id="aside__list">
+
+                </ul>
+            </div>
+        </div>
+    </aside>
+
+    <script>
+        const addAside = [
+    {
+        img: "images/18.png",
+        title: "Garden Care",
+        text: "We are an online plant shop offering a wide range of cheap and trendy plants."
+
+    },
+    {
+        img: "images/18.png",
+        title: "Plant Renovation",
+        text: "We are an online plant shop offering a wide range of cheap and trendy plants."
+
+    },
+    {
+        img: "images/19.png",
+        title: "Watering Graden",
+        text: "We are an online plant shop offering a wide range of cheap and trendy plants."
+
+    },
+    {
+        title: "Would you like to join newsletters?",
+        text: "We usually post offers and challenges in newsletter. We’re your online houseplant destination. We offer a wide range of houseplants and accessories shipped directly from our (green)house to yours! "
+
+    },
+
+];
+
+function addCard(){
+    let result = "";
+    addAside.forEach((aside, index) =>{
+        result += `
+            <li class="aside__item">
+                ${aside.img ? `<img class="aside__img" src="${aside.img}" alt="">` : ''}
+                <h1 class="aside__title">${aside.title}</h1>
+                ${index === 3 ? `
+                    <div class="newsletter__form">
+                        <input type="email" placeholder="Enter your email adress..." class="newsletter__input">
+                        <button class="newsletter__button"></button>
+                    </div>
+                ` : ''}
+                <p class="aside__text">${aside.text}</p>
+            </li>
+        `;
+    });
+
+    document.getElementById("aside__list").innerHTML = result;
+};
+
+addCard();
+
+    </script>
+
+<!-- ===================footer================================ -->
+
+
+<footer class="footer">
+    <div class="container">
+        <div class="footer__container">
+            <div class="box" id="box">
+
+            </div>
+            <ul class="footer__list" id="footer__list">
+
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<script>
+    const addFooter = [
+    {
+        img: "images/logojon.png",
+        location: "70 West Buckingham Ave. <br>Farmingdale, NY 11735",
+        phone: "+88 01911 717 490",
+        email: "contact@greenshop.com"
+    }
+];
+
+function addLokatsiya(){
+    let result = "";
+    addFooter.forEach((footer) =>{
+        result += `
+            <li class="footer__item">
+                <img class="footer__img" src="${footer.img}" alt="Logo">
+                <a class="footer__link" href="#" style="text-decoration:none;"><i class="fas fa-map-marker-alt"></i> ${footer.location}</a>
+                <a class="footer__link" href="tel:${footer.phone}"><i class="fas fa-phone"></i> ${footer.phone}</a>
+                <a class="footer__link" href="mailto:${footer.email}"><i class="fas fa-envelope"></i> ${footer.email}</a>
+            </li>
+        `;
+    });
+
+    document.getElementById("box").innerHTML = result;
+};
+
+addLokatsiya();
+
+
+const addLink = [
+    {
+        title: "My Account",
+        links: [
+            "My Account",
+            "Our Stores",
+            "Contact Us",
+            "Career",
+            "Specials"
+        ]
+    },
+    {
+        title: "Help & Guide",
+        links: [
+            "Help Center",
+            "How to Buy",
+            "Shipping & Delivery",
+            "Product Policy",
+            "How to Return"
+        ]
+    },
+    {
+        title: "Categories",
+        links: [
+            "House Plants",
+            "Potter Plants",
+            "Seeds",
+            "Small Plants",
+            "Accessories"
+        ]
+    },
+    {
+        title: "Social Media",
+        icons: [
+            { icon: "fab fa-facebook-f", url: "#" },
+            { icon: "fab fa-instagram", url: "#" },
+            { icon: "fab fa-twitter", url: "#" },
+            { icon: "fab fa-linkedin", url: "#" },
+            { icon: "fab fa-youtube", url: "#" }
+        ]
+    },
+    {
+        title: "We Accept",
+        img: "images/paypal.png"
+    }
+];
+
+function renderFooter() {
+    let result = "";
+
+    addLink.forEach(item => {
+        result += `<div class="footer__box">
+            <h3 class = "title">${item.title}</h3>
+            <ul>`; 
+
+        if (item.links) {
+            item.links.forEach(link => {
+               
+                result += `<li><a class = "link" href="#">${link}</a></li>`;
+            });
+        }
+
+        if (item.icons) {
+            result += `<div class="social-icons">`;
+            item.icons.forEach(social => {
+                result += `<a href="${social.url}"><i class="${social.icon}"></i></a>`;
+            });
+            result += `</div>`;
+        }
+
+        if (item.img) {
+            result += `<img class="pay-img" src="${item.img}" alt="">`;
+        }
+
+        result += `</ul></div>`; 
+    });
+
+    document.getElementById("footer__list").innerHTML = result;
+}
+
+renderFooter();
+
+</script>
+
+<hr>
+<h1 class="boxing">© 2021 GreenShop. All Rights Reserved.</h1>
 
 
 
