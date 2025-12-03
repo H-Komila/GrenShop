@@ -2506,10 +2506,15 @@ margin-bottom: 20px;
     padding: 0;
     margin: 0;
     list-style: none;
-
+ animation: scroll 20s linear infinite;
 }
 
-
+.scroll-wrapper {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    padding: 20px 0;
+}
 
 
 .releted__item {
@@ -2552,6 +2557,10 @@ line-height: 16px;
 letter-spacing: 0%;
 margin-bottom: 20px;
 }
+@keyframes scroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
 
 
 @media screen and (max-width: 768px) {
@@ -2570,13 +2579,14 @@ margin-bottom: 20px;
     padding: 0;
     margin: 0;
     list-style: none;
+   
+}
 
-}
-}
 
 @media screen and (max-width: 480px) {
     .releted__item {
-        min-width: 120px;
+        min-width: 150px;
+        height: 250px;
         padding: 10px;
     }
     .releted__subtitle {
@@ -2584,7 +2594,6 @@ margin-bottom: 20px;
     }
     .releted__list {
     display: flex;
-    flex-direction: column;
     gap: 20px;
     padding: 0;
     margin: 0;
