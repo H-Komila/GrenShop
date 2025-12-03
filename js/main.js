@@ -706,11 +706,11 @@ function renderFooter() {
     addLink.forEach(item => {
         result += `<div class="footer__box">
             <h3 class = "title">${item.title}</h3>
-            <ul>`; // Asosiy <ul> ni ochdik
+            <ul>`; 
 
         if (item.links) {
             item.links.forEach(link => {
-                // Linklarni <li> ichiga joylashtiramiz
+               
                 result += `<li><a class = "link" href="#">${link}</a></li>`;
             });
         }
@@ -727,7 +727,7 @@ function renderFooter() {
             result += `<img class="pay-img" src="${item.img}" alt="">`;
         }
 
-        result += `</ul></div>`; // Asosiy </ul> ni yopdik
+        result += `</ul></div>`; 
     });
 
     document.getElementById("footer__list").innerHTML = result;
@@ -736,158 +736,9 @@ function renderFooter() {
 renderFooter();
 
 
-// =======================product================
-
- const productData = {
-            title: "Barberton Daisy",
-            price: 119.00,
-            description: "The ceramic cylinder planters come with a wooden stand to help elevate your plants off the ground. The ceramic cylinder planters come with a wooden stand to help elevate your plants off the ground.",
-            sizes: ["M", "L", "XL"],
-            sku: "1995/51827966",
-            categories: "Porter Plants",
-            tags: "Home, Garden, Plants",
-            images: [
-                { thumbnail: "images/8.png", full: "images/8.png" },
-                { thumbnail: "images/6.png", full: "images/6.png" },
-                { thumbnail: "images/8.png", full: "images/8.png" },
-                { thumbnail: "images/7.png", full: "images/7.png" }
-            ]
-        };
-
-        
-        const mainImage = document.getElementById('main-image');
-        const thumbnails = document.querySelectorAll('.thumbnail');
-        const productTitle = document.getElementById('product-title');
-        const productPrice = document.getElementById('product-price');
-        const productDescription = document.getElementById('product-description');
-        const productSku = document.getElementById('product-sku');
-        const productCategories = document.getElementById('product-categories');
-        const productTags = document.getElementById('product-tags');
-        const sizeOptions = document.querySelectorAll('.size-option');
-        const decreaseBtn = document.getElementById('decrease-btn');
-        const increaseBtn = document.getElementById('increase-btn');
-        const resetBtn = document.getElementById('reset-btn');
-        const quantityDisplay = document.getElementById('quantity-display');
-        const buyNowBtn = document.getElementById('buy-now-btn');
-        const addToCartBtn = document.getElementById('add-to-cart-btn');
-        const notification = document.getElementById('notification');
-        const notificationText = document.getElementById('notification-text');
-
-       
-        function initializeProductData() {
-            productTitle.textContent = productData.title;
-            productPrice.textContent = `$${productData.price.toFixed(2)}`;
-            productDescription.textContent = productData.description;
-            productSku.textContent = productData.sku;
-            productCategories.textContent = productData.categories;
-            productTags.textContent = productData.tags;
-            
-            
-            if (productData.images.length > 0) {
-                mainImage.src = productData.images[0].full;
-            }
-            
-           
-            thumbnails.forEach((thumbnail, index) => {
-                if (productData.images[index]) {
-                    thumbnail.src = productData.images[index].thumbnail;
-                    thumbnail.dataset.full = productData.images[index].full;
-                }
-            });
-        }
-
-       
-        let quantity = 1;
-        
-        function updateQuantityDisplay() {
-    quantityDisplay.textContent = quantity;
-    quantityDisplay.classList.add('updated');
-    setTimeout(() => {
-        quantityDisplay.classList.remove('updated');
-    }, 300);
-}
-        
-        decreaseBtn.addEventListener('click', () => {
-            if (quantity > 1) {
-                quantity--;
-                updateQuantityDisplay();
-            }
-        });
-        
-        increaseBtn.addEventListener('click', () => {
-            quantity++;
-            updateQuantityDisplay();
-        });
-        
-        resetBtn.addEventListener('click', () => {
-            quantity = 1;
-            updateQuantityDisplay();
-            showNotification("Quantity reset to 1");
-        });
-
-        
-       thumbnails.forEach(thumbnail => {
-    thumbnail.addEventListener('click', function() {
-        thumbnails.forEach(thumb => thumb.classList.remove('active'));
-        this.classList.add('active');
-        
-        mainImage.classList.remove('fade-in');
-        void mainImage.offsetWidth; 
-        mainImage.classList.add('fade-in');
-        
-        mainImage.src = this.dataset.full; 
-        
-        mainImage.classList.add('zoom');
-        setTimeout(() => {
-            mainImage.classList.remove('zoom');
-        }, 500);
-    });
-});
 
 
-        sizeOptions.forEach(option => {
-            option.addEventListener('click', function() {
-                
-                sizeOptions.forEach(opt => opt.classList.remove('selected'));
-                
-                
-                this.classList.add('selected');
-                
-                
-                const selectedSize = this.dataset.size;
-                showNotification(`Size ${selectedSize} selected`);
-            });
-        });
-
-       
-        buyNowBtn.addEventListener('click', () => {
-            const selectedSize = document.querySelector('.size-option.selected').dataset.size;
-            showNotification(`Purchased ${quantity} ${productData.title} (Size: ${selectedSize}) for $${(quantity * productData.price).toFixed(2)}`);
-            
-           
-            quantity = 1;
-            updateQuantityDisplay();
-        });
-        
-        addToCartBtn.addEventListener('click', () => {
-            const selectedSize = document.querySelector('.size-option.selected').dataset.size;
-            showNotification(`Added ${quantity} ${productData.title} (Size: ${selectedSize}) to cart`);
-        });
-
-        
-        function showNotification(message) {
-            notificationText.textContent = message;
-            notification.classList.add('show');
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
-
-        
-        document.addEventListener('DOMContentLoaded', initializeProductData);
-
-
+ 
 
 
 
