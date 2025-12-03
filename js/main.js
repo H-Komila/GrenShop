@@ -731,322 +731,189 @@ function renderFooter() {
 renderFooter();
 
 
+// =======================product================
 
-
-
-const product = {
+ const productData = {
             title: "Barberton Daisy",
             price: 119.00,
-            originalPrice: 132.22,
-            rating: {
-                stars: 4.5,
-                review_count: 19
-            },
             description: "The ceramic cylinder planters come with a wooden stand to help elevate your plants off the ground. The ceramic cylinder planters come with a wooden stand to help elevate your plants off the ground.",
+            sizes: ["M", "L", "XL"],
+            sku: "1995/51827966",
+            categories: "Porter Plants",
+            tags: "Home, Garden, Plants",
             images: [
-                "../images/8.png",
-                "../images/a.png",
-                "../images/8.png",
-                "../images/a.png"
-            ],
-            sizes: ["S", "M", "L", "XL"],
-            sku: "1995751877966",
-            categories: ["Potter Plants"],
-            tags: ["Home", "Garden", "Plants"]
+                { thumbnail: "images/8.png", full: "images/8.png" },
+                { thumbnail: "images/6.png", full: "images/6.png" },
+                { thumbnail: "images/8.png", full: "images/8.png" },
+                { thumbnail: "images/7.png", full: "images/7.png" }
+            ]
         };
 
-        // DOM Elements
-        const mainImage = document.getElementById('mainImage');
-        const thumbnailContainer = document.getElementById('thumbnailContainer');
-        const productTitle = document.getElementById('productTitle');
-        const productPrice = document.getElementById('productPrice');
-        const productDiscount = document.getElementById('productDiscount');
-        const productStars = document.getElementById('productStars');
-        const productReviews = document.getElementById('productReviews');
-        const productDescription = document.getElementById('productDescription');
-        const sizeOptions = document.getElementById('sizeOptions');
-        const quantityElement = document.getElementById('quantity');
-        const productSKU = document.getElementById('productSKU');
-        const productCategories = document.getElementById('productCategories');
-        const productTags = document.getElementById('productTags');
-        const toast = document.getElementById('toast');
-        const toastMessage = document.getElementById('toastMessage');
-        const imageModal = document.getElementById('imageModal');
-        const modalImage = document.getElementById('modalImage');
-        const zoomBtn = document.getElementById('zoomBtn');
-        const closeModal = document.getElementById('closeModal');
         
-        // State variables
-        let currentImageIndex = 0;
-        let selectedSize = "M";
-        let quantity = 1;
-        let isWishlisted = false;
-        
-        // Calculate discount percentage
-        const discountPercentage = Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
-        
-        // Initialize the page with product data
-        function initializePage() {
-            // Set product info
-            productTitle.textContent = product.title;
-            productPrice.textContent = `$${product.price.toFixed(2)}`;
-            productDiscount.textContent = `${discountPercentage}% OFF`;
-            productDescription.textContent = product.description;
-            productSKU.textContent = product.sku;
-            productCategories.textContent = product.categories.join(", ");
-            productTags.textContent = product.tags.join(", ");
-            productReviews.textContent = `${product.rating.review_count} Customer Reviews`;
+        const mainImage = document.getElementById('main-image');
+        const thumbnails = document.querySelectorAll('.thumbnail');
+        const productTitle = document.getElementById('product-title');
+        const productPrice = document.getElementById('product-price');
+        const productDescription = document.getElementById('product-description');
+        const productSku = document.getElementById('product-sku');
+        const productCategories = document.getElementById('product-categories');
+        const productTags = document.getElementById('product-tags');
+        const sizeOptions = document.querySelectorAll('.size-option');
+        const decreaseBtn = document.getElementById('decrease-btn');
+        const increaseBtn = document.getElementById('increase-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const quantityDisplay = document.getElementById('quantity-display');
+        const buyNowBtn = document.getElementById('buy-now-btn');
+        const addToCartBtn = document.getElementById('add-to-cart-btn');
+        const notification = document.getElementById('notification');
+        const notificationText = document.getElementById('notification-text');
+
+       
+        function initializeProductData() {
+            productTitle.textContent = productData.title;
+            productPrice.textContent = `$${productData.price.toFixed(2)}`;
+            productDescription.textContent = productData.description;
+            productSku.textContent = productData.sku;
+            productCategories.textContent = productData.categories;
+            productTags.textContent = productData.tags;
             
-            // Create star rating
-            createStarRating(product.rating.stars);
             
-            // Load main image
-            loadImage(mainImage, product.images[0]);
-            
-            // Create thumbnails
-            createThumbnails();
-            
-            // Create size options
-            createSizeOptions();
-            
-            // Set up event listeners
-            setupEventListeners();
-            
-            // Initialize animations
-            initializeAnimations();
-        }
-        
-        // Load image with fade-in effect
-        function loadImage(imgElement, src) {
-            imgElement.src = src;
-            imgElement.onload = () => {
-                imgElement.classList.add('loaded');
-                document.querySelector('.loader').style.display = 'none';
-            };
-        }
-        
-        // Create star rating display
-        function createStarRating(rating) {
-            productStars.innerHTML = '';
-            const fullStars = Math.floor(rating);
-            const hasHalfStar = rating % 1 >= 0.5;
-            
-            for (let i = 1; i <= 5; i++) {
-                const star = document.createElement('i');
-                if (i <= fullStars) {
-                    star.className = 'fas fa-star';
-                } else if (hasHalfStar && i === fullStars + 1) {
-                    star.className = 'fas fa-star-half-alt';
-                } else {
-                    star.className = 'far fa-star';
-                }
-                productStars.appendChild(star);
+            if (productData.images.length > 0) {
+                mainImage.src = productData.images[0].full;
             }
             
-            // Add rating number
-            const ratingNumber = document.createElement('span');
-            ratingNumber.textContent = ` ${rating}`;
-            ratingNumber.style.marginLeft = '8px';
-            ratingNumber.style.fontWeight = '600';
-            ratingNumber.style.color = '#444';
-            productStars.appendChild(ratingNumber);
-        }
-        
-        // Create thumbnail images
-        function createThumbnails() {
-            thumbnailContainer.innerHTML = '';
-            
-            product.images.forEach((imageSrc, index) => {
-                const thumbnail = document.createElement('div');
-                thumbnail.className = 'thumbnail';
-                if (index === currentImageIndex) {
-                    thumbnail.classList.add('active');
-                }
-                
-                const img = document.createElement('img');
-                img.src = imageSrc;
-                img.alt = `${product.title} - View ${index + 1}`;
-                
-                thumbnail.appendChild(img);
-                thumbnailContainer.appendChild(thumbnail);
-                
-                // Add click event to thumbnail
-                thumbnail.addEventListener('click', () => {
-                    changeMainImage(index);
-                });
-            });
-        }
-        
-        // Create size selection options
-        function createSizeOptions() {
-            sizeOptions.innerHTML = '';
-            
-            product.sizes.forEach(size => {
-                const sizeOption = document.createElement('div');
-                sizeOption.className = 'size-option';
-                if (size === selectedSize) {
-                    sizeOption.classList.add('selected');
-                }
-                sizeOption.textContent = size;
-                
-                sizeOption.addEventListener('click', () => {
-                    // Remove selected class from all sizes
-                    document.querySelectorAll('.size-option').forEach(option => {
-                        option.classList.remove('selected');
-                    });
-                    
-                    // Add selected class to clicked size
-                    sizeOption.classList.add('selected');
-                    selectedSize = size;
-                    
-                    // Show toast notification
-                    showToast(`Size changed to ${size}`);
-                });
-                
-                sizeOptions.appendChild(sizeOption);
-            });
-        }
-        
-        // Change main image
-        function changeMainImage(index) {
-            if (index === currentImageIndex) return;
-            
-            // Update current image index
-            currentImageIndex = index;
-            
-            // Remove active class from all thumbnails
-            document.querySelectorAll('.thumbnail').forEach(thumb => {
-                thumb.classList.remove('active');
-            });
-            
-            // Add active class to clicked thumbnail
-            document.querySelectorAll('.thumbnail')[index].classList.add('active');
-            
-            // Fade out current image
-            mainImage.classList.remove('loaded');
-            
-            // Load new image after a short delay
-            setTimeout(() => {
-                loadImage(mainImage, product.images[index]);
-                modalImage.src = product.images[index];
-            }, 300);
-        }
-        
-        // Show toast notification
-        function showToast(message) {
-            toastMessage.textContent = message;
-            toast.classList.add('show');
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
-        
-        // Setup event listeners
-        function setupEventListeners() {
-            // Quantity controls
-            document.getElementById('increaseQty').addEventListener('click', () => {
-                quantity++;
-                quantityElement.textContent = quantity;
-            });
-            
-            document.getElementById('decreaseQty').addEventListener('click', () => {
-                if (quantity > 1) {
-                    quantity--;
-                    quantityElement.textContent = quantity;
-                }
-            });
-            
-            // Buy Now button
-            document.getElementById('buyNowBtn').addEventListener('click', () => {
-                showToast(`Purchased ${quantity} ${product.title} (Size: ${selectedSize})`);
-                // In a real app, this would redirect to checkout
-            });
-            
-            // Add to Cart button
-            document.getElementById('addToCartBtn').addEventListener('click', () => {
-                showToast(`Added ${quantity} ${product.title} (Size: ${selectedSize}) to cart`);
-                // In a real app, this would update cart state
-            });
-            
-            // Wishlist button
-            document.getElementById('wishlistBtn').addEventListener('click', () => {
-                isWishlisted = !isWishlisted;
-                const wishlistBtn = document.getElementById('wishlistBtn');
-                
-                if (isWishlisted) {
-                    wishlistBtn.innerHTML = '<i class="fas fa-heart" style="color: #ff5252;"></i>';
-                    showToast('Added to wishlist');
-                } else {
-                    wishlistBtn.innerHTML = '<i class="fas fa-heart"></i>';
-                    showToast('Removed from wishlist');
-                }
-            });
-            
-            // Zoom button
-            zoomBtn.addEventListener('click', () => {
-                modalImage.src = product.images[currentImageIndex];
-                imageModal.classList.add('active');
-            });
-            
-            // Close modal
-            closeModal.addEventListener('click', () => {
-                imageModal.classList.remove('active');
-            });
-            
-            // Close modal when clicking outside the image
-            imageModal.addEventListener('click', (e) => {
-                if (e.target === imageModal) {
-                    imageModal.classList.remove('active');
-                }
-            });
-            
-            // Keyboard support
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && imageModal.classList.contains('active')) {
-                    imageModal.classList.remove('active');
-                }
-                
-                // Arrow keys for image navigation
-                if (!imageModal.classList.contains('active')) {
-                    if (e.key === 'ArrowRight') {
-                        const nextIndex = (currentImageIndex + 1) % product.images.length;
-                        changeMainImage(nextIndex);
-                    } else if (e.key === 'ArrowLeft') {
-                        const prevIndex = (currentImageIndex - 1 + product.images.length) % product.images.length;
-                        changeMainImage(prevIndex);
-                    }
+           
+            thumbnails.forEach((thumbnail, index) => {
+                if (productData.images[index]) {
+                    thumbnail.src = productData.images[index].thumbnail;
+                    thumbnail.dataset.full = productData.images[index].full;
                 }
             });
         }
+
+       
+        let quantity = 1;
         
-        // Initialize animations on scroll
-        function initializeAnimations() {
-            const fadeElements = document.querySelectorAll('.fade-in');
-            
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, { threshold: 0.1 });
-            
-            fadeElements.forEach(element => {
-                observer.observe(element);
-            });
-        }
+        function updateQuantityDisplay() {
+    quantityDisplay.textContent = quantity;
+    quantityDisplay.classList.add('updated');
+    setTimeout(() => {
+        quantityDisplay.classList.remove('updated');
+    }, 300);
+}
         
-        // Initialize the page when DOM is loaded
-        document.addEventListener('DOMContentLoaded', initializePage);
-        
-        // Add some responsive behavior for window resize
-        window.addEventListener('resize', () => {
-            // Adjust image container height on resize
-            const mainImageContainer = document.querySelector('.main-image-container');
-            if (window.innerWidth < 768) {
-                mainImageContainer.style.height = '350px';
-            } else {
-                mainImageContainer.style.height = '450px';
+        decreaseBtn.addEventListener('click', () => {
+            if (quantity > 1) {
+                quantity--;
+                updateQuantityDisplay();
             }
         });
+        
+        increaseBtn.addEventListener('click', () => {
+            quantity++;
+            updateQuantityDisplay();
+        });
+        
+        resetBtn.addEventListener('click', () => {
+            quantity = 1;
+            updateQuantityDisplay();
+            showNotification("Quantity reset to 1");
+        });
+
+        
+       thumbnails.forEach(thumbnail => {
+    thumbnail.addEventListener('click', function() {
+        thumbnails.forEach(thumb => thumb.classList.remove('active'));
+        this.classList.add('active');
+        
+        mainImage.classList.remove('fade-in');
+        void mainImage.offsetWidth; 
+        mainImage.classList.add('fade-in');
+        
+        mainImage.src = this.dataset.full; 
+        
+        mainImage.classList.add('zoom');
+        setTimeout(() => {
+            mainImage.classList.remove('zoom');
+        }, 500);
+    });
+});
+
+
+        sizeOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                
+                sizeOptions.forEach(opt => opt.classList.remove('selected'));
+                
+                
+                this.classList.add('selected');
+                
+                
+                const selectedSize = this.dataset.size;
+                showNotification(`Size ${selectedSize} selected`);
+            });
+        });
+
+       
+        buyNowBtn.addEventListener('click', () => {
+            const selectedSize = document.querySelector('.size-option.selected').dataset.size;
+            showNotification(`Purchased ${quantity} ${productData.title} (Size: ${selectedSize}) for $${(quantity * productData.price).toFixed(2)}`);
+            
+           
+            quantity = 1;
+            updateQuantityDisplay();
+        });
+        
+        addToCartBtn.addEventListener('click', () => {
+            const selectedSize = document.querySelector('.size-option.selected').dataset.size;
+            showNotification(`Added ${quantity} ${productData.title} (Size: ${selectedSize}) to cart`);
+        });
+
+        
+        function showNotification(message) {
+            notificationText.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        
+        document.addEventListener('DOMContentLoaded', initializeProductData);
+
+
+
+
+
+// ===========================description-=========================
+
+
+const addDescription = [
+    {
+        title: ["Product Description", "Reviews (19)"],
+        text: "The ceramic cylinder planters come with a wooden stand to help elevate your plants off the ground. The ceramic cylinder planters come with a wooden stand to help elevate your plants off the ground. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam fringilla augue nec est tristique auctor. Donec non est at libero vulputate rutrum. Morbi ornare lectus quis justo gravida semper. Nulla tellus mi, vulputate adipiscing cursus eu, suscipit id nulla.Pellentesque aliquet, sem eget laoreet ultrices, ipsum metus feugiat sem, quis fermentum turpis eros eget velit. Donec ac tempus ante. Fusce ultricies massa massa. Fusce aliquam, purus eget sagittis vulputate, sapien libero hendrerit est, sed commodo augue nisi non neque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempor, lorem et placerat vestibulum, metus nisi posuere nisl, in accumsan elit odio quis mi. Cras neque metus, consequat et blandit et, luctus a nunc. Etiam gravida vehicula tellus, in imperdiet ligula euismod eget. The ceramic cylinder planters come with a wooden stand to help elevate your plants off the ground. ",
+        title1: "Living Room:",
+        text1: "The ceramic cylinder planters come with a wooden stand to help elevate your plants off the ground. The ceramic cylinder planters come with a wooden stand to help elevate your plants off the ground. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        title1: "Dining Room:",
+        text1:"The benefits of houseplants are endless. In addition to cleaning the air of harmful toxins, they can help to improve your mood, reduce stress and provide you with better sleep. Fill every room of your home with houseplants and their restorative qualities will improve your life.",
+        title1: "Office:",
+        text1:"The ceramic cylinder planters come with a wooden stand to help elevate your plants off the ground. The ceramic cylinder planters come with a wooden stand to help elevate your plants off the ground. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    }
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
