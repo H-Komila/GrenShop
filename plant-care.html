@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/main.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <nav class="nav">
+        <div class="container">
+            <div class="nav__container">
+                <div class="nav__logo">
+                    <img src="./images/logojon.png">
+                </div>
+                <ul class="nav__list" id="nav__list">
+
+                </ul>
+
+                <div class="bars" id="bars">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <script>
+        const navigation = [
+            {
+
+                links: [
+                    { name: "Home", href: "index.html" },
+                    { name: "Shop", href: "shop.html" },
+                    { name: "Plant Care", href: "plant-care.html" },
+                    { name: "Blogs", href: "blogs.html" }
+                ],
+                button: "Login",
+                bars: "fa-solid fa-bars"
+            }
+        ];
+
+        function addNavigation() {
+            let result = "";
+
+            navigation.forEach(item => {
+                item.links.forEach(link => {
+                    result += `
+                        <li class="nav__item">
+                            <a href="${link.href}">${link.name}</a>
+                        </li>
+                    `;
+                });
+
+                result += `
+                    <li class="nav__item">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <button class="btn">
+                            <i class="fa-solid fa-right-to-bracket"></i>
+                            ${item.button}
+                        </button>
+                    </li>
+                `;
+            });
+
+            document.getElementById("nav__list").innerHTML = result;
+        }
+
+        addNavigation();
+
+        const bars = document.getElementById("bars");
+        const navList = document.getElementById("nav__list");
+
+        bars.addEventListener("click", (e) => {
+            e.stopPropagation();
+            navList.classList.toggle("active");
+
+
+            const barsIcon = bars.querySelector("i");
+            if (navList.classList.contains("active")) {
+                barsIcon.classList.remove("fa-bars");
+                barsIcon.classList.add("fa-xmark");
+
+                document.body.style.overflow = "hidden";
+            } else {
+                barsIcon.classList.remove("fa-xmark");
+                barsIcon.classList.add("fa-bars");
+                document.body.style.overflow = "";
+            }
+        });
+
+
+        document.addEventListener("click", function (event) {
+            if (window.innerWidth <= 768 &&
+                navList.classList.contains("active") &&
+                !navList.contains(event.target) &&
+                !bars.contains(event.target)) {
+
+                navList.classList.remove("active");
+                const barsIcon = bars.querySelector("i");
+                barsIcon.classList.remove("fa-xmark");
+                barsIcon.classList.add("fa-bars");
+                document.body.style.overflow = "";
+            }
+        });
+
+        document.addEventListener("click", function (event) {
+            if (window.innerWidth <= 768 &&
+                navList.classList.contains("active") &&
+                (event.target.tagName === 'A' ||
+                    event.target.closest('a') ||
+                    event.target.tagName === 'BUTTON' ||
+                    event.target.closest('button'))) {
+
+
+                setTimeout(() => {
+                    navList.classList.remove("active");
+                    const barsIcon = bars.querySelector("i");
+                    barsIcon.classList.remove("fa-xmark");
+                    barsIcon.classList.add("fa-bars");
+                    document.body.style.overflow = "";
+                }, 300);
+            }
+        });
+
+        window.addEventListener("resize", function () {
+            if (window.innerWidth > 768 && navList.classList.contains("active")) {
+                navList.classList.remove("active");
+                const barsIcon = bars.querySelector("i");
+                barsIcon.classList.remove("fa-xmark");
+                barsIcon.classList.add("fa-bars");
+                document.body.style.overflow = "";
+            }
+        });
+    </script>
+
+    <!-- ================================================ -->
+
+<div class="container">
+    <div class="nimadir">
+        <div class="nav-links">
+            <span onclick="navigate('home')">Home</span> /
+            <span onclick="navigate('shop')">Shop</span> /
+            <span>Shopping Cart</span>
+        </div>
+
+        
+        <div class="page-title">
+            GreenShop (portfolio)
+        </div>
+
+       
+        <div id="products-container"></div>
+
+       
+        <div class="cart-totals">
+            <h2>Cart Totals</h2>
+
+            <div class="coupon-box">
+                <input type="text" placeholder="Enter coupon code here..." id="coupon-input">
+                <button onclick="applyCoupon()">Apply</button>
+            </div>
+
+            <div id="totals-container"></div>
+
+            <div class="action-buttons">
+                <button class="checkout-btn" onclick="checkout()">Proceed To Checkout</button>
+                <button class="continue-btn" onclick="navigate('shop')">Continue Shopping</button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script>
+        const appPlant = [
+            {
+                id: 1,
+                name: "Orchid Premium",
+                price: 119.00,
+                quantity: 2,
+                sku: "PLANT001",
+                category: "Flowering",
+                image: "🌸"
+            },
+            {
+                id: 2,
+                name: "Monstera Deliciosa",
+                price: 139.00,
+                quantity: 3,
+                sku: "PLANT002",
+                category: "Tropical",
+                image: "🌿"
+            },
+            {
+                id: 3,
+                name: "Ficus Bonsai",
+                price: 179.00,
+                quantity: 1,
+                sku: "PLANT003",
+                category: "Bonsai",
+                image: "🌾"
+            },
+            {
+                id: 4,
+                name: "Cactus Mix",
+                price: 89.00,
+                quantity: 4,
+                sku: "PLANT004",
+                category: "Succulents",
+                image: "🌵"
+            },
+            {
+                id: 5,
+                name: "Peace Lily White",
+                price: 129.00,
+                quantity: 2,
+                sku: "PLANT005",
+                category: "Indoor",
+                image: "🌼"
+            },
+            {
+                id: 6,
+                name: "Spider Plant Variegated",
+                price: 69.00,
+                quantity: 5,
+                sku: "PLANT006",
+                category: "Air Purifying",
+                image: "🎍"
+            }
+        ];
+
+        const shippingCost = 16.00;
+        let couponDiscount = 0.00;
+
+        // Mahsulotning umumiy summasini hisoblash
+        function calculateProductTotal(price, quantity) {
+            return price * quantity;
+        }
+
+        // Umumiy summani hisoblash
+        function calculateSubtotal() {
+            return appPlant.reduce((sum, product) => {
+                return sum + calculateProductTotal(product.price, product.quantity);
+            }, 0);
+        }
+
+        // Yakuniy summani hisoblash
+        function calculateTotal() {
+            return calculateSubtotal() + shippingCost - couponDiscount;
+        }
+
+        // Mahsulotlar jadvalini ko'rsatish
+        function renderProducts() {
+            const container = document.getElementById('products-container');
+
+            // Agar container topilmasa, chiqamiz
+            if (!container) {
+                console.error("products-container topilmadi");
+                return;
+            }
+
+            let html = `
+        <table class="product-table">
+            <thead>
+                <tr>
+                    <th>Mahsulot</th>
+                    <th>Narxi</th>
+                    <th>Soni</th>
+                    <th>Jami</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+            appPlant.forEach(product => {
+                const total = calculateProductTotal(product.price, product.quantity);
+                html += `
+            <tr data-id="${product.id}">
+                <td>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 24px;">${product.image}</span>
+                        <div>
+                            <div class="product-name">${product.name}</div>
+                            <div class="product-sku">SKU: ${product.sku}</div>
+                            <div style="color: #4caf50; font-size: 12px; margin-top: 3px;">${product.category}</div>
+                        </div>
+                    </div>
+                </td>
+                <td>$${product.price.toFixed(2)}</td>
+                <td>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <button onclick="updateQuantity(${product.id}, -1)" style="padding: 5px 10px; background: #f0f0f0; border: 1px solid #ddd; cursor: pointer;">-</button>
+                        <span>${product.quantity}</span>
+                        <button onclick="updateQuantity(${product.id}, 1)" style="padding: 5px 10px; background: #f0f0f0; border: 1px solid #ddd; cursor: pointer;">+</button>
+                    </div>
+                </td>
+                <td>$${total.toFixed(2)}</td>
+            </tr>
+        `;
+            });
+
+            html += `</tbody></table>`;
+            container.innerHTML = html;
+        }
+
+        // Summalarni ko'rsatish
+        function renderTotals() {
+            const container = document.getElementById('totals-container');
+
+            if (!container) {
+                console.error("totals-container topilmadi");
+                return;
+            }
+
+            const subtotal = calculateSubtotal();
+            const total = calculateTotal();
+
+            container.innerHTML = `
+        <div class="totals-row">
+            <span>Jami mahsulotlar</span>
+            <span>$${subtotal.toFixed(2)}</span>
+        </div>
+        <div class="totals-row">
+            <span>Kupon chegirmasi</span>
+            <span style="color: red;">-$${couponDiscount.toFixed(2)}</span>
+        </div>
+        <div class="totals-row">
+            <span>Yetkazib berish</span>
+            <span>$${shippingCost.toFixed(2)}</span>
+        </div>
+        <div class="totals-row" style="font-style: italic; color: #666; font-size: 14px;">
+            <span>Yetkazib berish 2-3 ish kunida amalga oshiriladi</span>
+            <span></span>
+        </div>
+        <div class="totals-row total">
+            <span>Umumiy summa</span>
+            <span>$${total.toFixed(2)}</span>
+        </div>
+    `;
+        }
+
+        // Mahsulot sonini yangilash
+        function updateQuantity(productId, change) {
+            const product = appPlant.find(p => p.id === productId);
+
+            if (product) {
+                const newQuantity = product.quantity + change;
+
+                if (newQuantity >= 0) {
+                    product.quantity = newQuantity;
+                    renderProducts();
+                    renderTotals();
+
+                    if (couponDiscount > 0) {
+                        // Agar kupon qo'llangan bo'lsa, uni qayta hisoblaymiz
+                        const couponInput = document.getElementById('coupon-input');
+                        if (couponInput) {
+                            applyCoupon();
+                        }
+                    }
+                }
+            }
+        }
+
+        // Kupon qo'llash
+        function applyCoupon() {
+            const couponInput = document.getElementById('coupon-input');
+
+            if (!couponInput) {
+                console.error("coupon-input topilmadi");
+                return;
+            }
+
+            const couponCode = couponInput.value.trim().toUpperCase();
+
+            if (couponCode === "GREEN10") {
+                couponDiscount = calculateSubtotal() * 0.10; // 10% chegirma
+                showMessage("Kupon muvaffaqiyatli qo'llandi! 10% chegirma qo'shildi.", "success");
+            } else if (couponCode === "PLANT20") {
+                couponDiscount = calculateSubtotal() * 0.20; // 20% chegirma
+                showMessage("Kupon muvaffaqiyatli qo'llandi! 20% chegirma qo'shildi.", "success");
+            } else if (couponCode === "FREE16") {
+                // Yetkazib berish bepul
+                showMessage("Kupon muvaffaqiyatli qo'llandi! Yetkazib berish bepul bo'ldi.", "success");
+                shippingCost = 0;
+            } else if (couponCode) {
+                showMessage("Noto'g'ri kupon kodi. Iltimos, qayta urinib ko'ring.", "error");
+                couponDiscount = 0.00;
+            } else {
+                couponDiscount = 0.00;
+            }
+
+            renderTotals();
+        }
+
+        // Xabar ko'rsatish
+        function showMessage(message, type) {
+            // Oldingi xabarlarni olib tashlash
+            const existingMessage = document.querySelector('.message');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.textContent = message;
+            messageDiv.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        border-radius: 5px;
+        color: white;
+        font-weight: bold;
+        z-index: 1000;
+        animation: slideIn 0.3s ease;
+    `;
+
+            if (type === "success") {
+                messageDiv.style.backgroundColor = "#4caf50";
+            } else if (type === "error") {
+                messageDiv.style.backgroundColor = "#f44336";
+            }
+
+            document.body.appendChild(messageDiv);
+
+            // 3 soniyadan keyin xabarni olib tashlash
+            setTimeout(() => {
+                messageDiv.style.animation = "slideOut 0.3s ease";
+                setTimeout(() => {
+                    if (messageDiv.parentNode) {
+                        messageDiv.parentNode.removeChild(messageDiv);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Checkout funktsiyasi
+        function checkout() {
+            const total = calculateTotal();
+            showMessage(`Sotib olishga o'tilmoqda. Umumiy summa: $${total.toFixed(2)}`, "success");
+
+            // Haqiqiy loyihada bu yerda to'lov sahifasiga yo'naltiriladi
+            setTimeout(() => {
+                alert("To'lov sahifasiga yo'naltirilmoqda...");
+                // window.location.href = "checkout.html";
+            }, 1500);
+        }
+
+        // Navigatsiya funktsiyasi
+        function navigate(page) {
+            showMessage(`${page} sahifasiga o'tilmoqda...`, "success");
+            // Haqiqiy loyihada:
+            // if (page === 'home') window.location.href = "index.html";
+            // if (page === 'shop') window.location.href = "shop.html";
+        }
+
+        // Animatsiya qo'shamiz
+        const style = document.createElement('style');
+        style.textContent = `
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    @keyframes slideOut {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+    }
+    
+    .product-table tr:hover {
+        background-color: #f9f9f9;
+        transition: background-color 0.3s;
+    }
+    
+    button:hover {
+        opacity: 0.9;
+        transition: opacity 0.3s;
+    }
+`;
+        document.head.appendChild(style);
+
+        // Sahifani yuklash
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log("Sahifa yuklandi. appPlant ma'lumotlari:", appPlant);
+            renderProducts();
+            renderTotals();
+
+            // Kupon kiritish maydoniga ENTER bosganda ham kupon qo'llash
+            const couponInput = document.getElementById('coupon-input');
+            if (couponInput) {
+                couponInput.addEventListener('keypress', function (e) {
+                    if (e.key === 'Enter') {
+                        applyCoupon();
+                    }
+                });
+            }
+        });
+
+        // appPlant ma'lumotlarini konsolda ko'rish uchun
+        console.log("appPlant ma'lumotlari:", appPlant);
+        console.log("Umumiy mahsulotlar soni:", appPlant.length);
+        console.log("Jami summa:", calculateSubtotal());
+
+    </script>
+
+
+
+    <div class="releted1">
+        <div class="container">
+            <div class="releted__container">
+                <h1 class="releted__subtitle">Releted Products</h1>
+                <hr class="hr">
+                <marquee behavior="" direction="">
+                    <ul class="releted__list" id="releted__list">
+                    </ul>
+                </marquee>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        const addReleted = [
+            { img: "images/d.png", title: "Beach Spider Lily", text: "$129.00" },
+            { img: "images/e.png", title: "Blushing Bromeliad", text: "$139.00" },
+            { img: "images/f.png", title: "Aluminum Plant", text: "$179.00" },
+            { img: "images/g.png", title: "Bird's Nest Fern", text: "$99.00" },
+            { img: "images/i.png", title: "Chinese Evergreen", text: "$39.00" },
+            { img: "images/d.png", title: "Beach Spider Lily", text: "$129.00" },
+            { img: "images/e.png", title: "Blushing Bromeliad", text: "$139.00" },
+            { img: "images/f.png", title: "Aluminum Plant", text: "$179.00" },
+            { img: "images/g.png", title: "Bird's Nest Fern", text: "$99.00" },
+            { img: "images/i.png", title: "Chinese Evergreen", text: "$39.00" },
+        ];
+
+        function addUser() {
+            let result = "";
+            addReleted.forEach((user) => {
+                result += `
+            <li class="releted__item">
+                <img class="releted__img" src="${user.img}" alt="${user.title}">
+                <h3 class="releted__title">${user.title}</h3>
+                <p class="releted__text">${user.text}</p>
+            </li>
+        `;
+            });
+
+            document.getElementById("releted__list").innerHTML = result;
+        }
+
+        document.addEventListener("DOMContentLoaded", addUser);
+
+    </script>
+
+
+    <!-- ==========================aside====================== -->
+
+    <aside class="aside">
+        <div class="container">
+            <div class="aside__container">
+                <ul class="aside__list" id="aside__list">
+
+                </ul>
+            </div>
+        </div>
+    </aside>
+
+    <script>
+        const addAside = [
+            {
+                img: "images/18.png",
+                title: "Garden Care",
+                text: "We are an online plant shop offering a wide range of cheap and trendy plants."
+
+            },
+            {
+                img: "images/18.png",
+                title: "Plant Renovation",
+                text: "We are an online plant shop offering a wide range of cheap and trendy plants."
+
+            },
+            {
+                img: "images/19.png",
+                title: "Watering Graden",
+                text: "We are an online plant shop offering a wide range of cheap and trendy plants."
+
+            },
+            {
+                title: "Would you like to join newsletters?",
+                text: "We usually post offers and challenges in newsletter. We’re your online houseplant destination. We offer a wide range of houseplants and accessories shipped directly from our (green)house to yours! "
+
+            },
+
+        ];
+
+        function addCard() {
+            let result = "";
+            addAside.forEach((aside, index) => {
+                result += `
+            <li class="aside__item">
+                ${aside.img ? `<img class="aside__img" src="${aside.img}" alt="">` : ''}
+                <h1 class="aside__title">${aside.title}</h1>
+                ${index === 3 ? `
+                    <div class="newsletter__form">
+                        <input type="email" placeholder="Enter your email adress..." class="newsletter__input">
+                        <button class="newsletter__button"></button>
+                    </div>
+                ` : ''}
+                <p class="aside__text">${aside.text}</p>
+            </li>
+        `;
+            });
+
+            document.getElementById("aside__list").innerHTML = result;
+        };
+
+        addCard();
+
+    </script>
+
+    <!-- ===================footer================================ -->
+
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__container">
+                <div class="box" id="box">
+
+                </div>
+                <ul class="footer__list" id="footer__list">
+
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const addFooter = [
+            {
+                img: "images/logojon.png",
+                location: "70 West Buckingham Ave. <br>Farmingdale, NY 11735",
+                phone: "+88 01911 717 490",
+                email: "contact@greenshop.com"
+            }
+        ];
+
+        function addLokatsiya() {
+            let result = "";
+            addFooter.forEach((footer) => {
+                result += `
+            <li class="footer__item">
+                <img class="footer__img" src="${footer.img}" alt="Logo">
+                <a class="footer__link" href="#" style="text-decoration:none;"><i class="fas fa-map-marker-alt"></i> ${footer.location}</a>
+                <a class="footer__link" href="tel:${footer.phone}"><i class="fas fa-phone"></i> ${footer.phone}</a>
+                <a class="footer__link" href="mailto:${footer.email}"><i class="fas fa-envelope"></i> ${footer.email}</a>
+            </li>
+        `;
+            });
+
+            document.getElementById("box").innerHTML = result;
+        };
+
+        addLokatsiya();
+
+
+        const addLink = [
+            {
+                title: "My Account",
+                links: [
+                    "My Account",
+                    "Our Stores",
+                    "Contact Us",
+                    "Career",
+                    "Specials"
+                ]
+            },
+            {
+                title: "Help & Guide",
+                links: [
+                    "Help Center",
+                    "How to Buy",
+                    "Shipping & Delivery",
+                    "Product Policy",
+                    "How to Return"
+                ]
+            },
+            {
+                title: "Categories",
+                links: [
+                    "House Plants",
+                    "Potter Plants",
+                    "Seeds",
+                    "Small Plants",
+                    "Accessories"
+                ]
+            },
+            {
+                title: "Social Media",
+                icons: [
+                    { icon: "fab fa-facebook-f", url: "#" },
+                    { icon: "fab fa-instagram", url: "#" },
+                    { icon: "fab fa-twitter", url: "#" },
+                    { icon: "fab fa-linkedin", url: "#" },
+                    { icon: "fab fa-youtube", url: "#" }
+                ]
+            },
+            {
+                title: "We Accept",
+                img: "images/paypal.png"
+            }
+        ];
+
+        function renderFooter() {
+            let result = "";
+
+            addLink.forEach(item => {
+                result += `<div class="footer__box">
+            <h3 class = "title">${item.title}</h3>
+            <ul>`;
+
+                if (item.links) {
+                    item.links.forEach(link => {
+
+                        result += `<li><a class = "link" href="#">${link}</a></li>`;
+                    });
+                }
+
+                if (item.icons) {
+                    result += `<div class="social-icons">`;
+                    item.icons.forEach(social => {
+                        result += `<a href="${social.url}"><i class="${social.icon}"></i></a>`;
+                    });
+                    result += `</div>`;
+                }
+
+                if (item.img) {
+                    result += `<img class="pay-img" src="${item.img}" alt="">`;
+                }
+
+                result += `</ul></div>`;
+            });
+
+            document.getElementById("footer__list").innerHTML = result;
+        }
+
+        renderFooter();
+
+    </script>
+
+    <hr>
+    <h1 class="boxing">© 2021 GreenShop. All Rights Reserved.</h1>
+
+
+
+
+
+
+
+
+
+    <script src="./js/main.js"></script>
+</body>
+
+</html>

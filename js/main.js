@@ -1,7 +1,7 @@
 const navigation = [
     {
 
-         links: [
+        links: [
             { name: "Home", href: "index.html" },
             { name: "Shop", href: "shop.html" },
             { name: "Plant Care", href: "plant-care.html" },
@@ -111,32 +111,32 @@ window.addEventListener("resize", function () {
 
 const headerData = [
     {
-        small: "images/1.png", 
-        large: "images/2.png", 
+        small: "images/1.png",
+        large: "images/2.png",
         title: "Welcome to GreenShop",
         title2: "Let’s Make a Better <span class='span'>Planet</span>",
         text: "We are an online plant shop offering a wide range of cheap and trendy plants. Use our plants to <br> create an unique Urban Jungle. Order your favorite plants!",
         button: "SHOP NOW"
     },
     {
-        small: "images/1.png", 
-        large: "images/4.png", 
-       
+        small: "images/1.png",
+        large: "images/4.png",
+
     },
     {
-        small: "images/1.png", 
-        large: "images/8.png", 
+        small: "images/1.png",
+        large: "images/8.png",
     }
 ];
 
-let imageIndex = 0; 
+let imageIndex = 0;
 let autoSlideTimeout;
 
 
 function renderStaticContent() {
     const mainContainer = document.getElementById("main-header-content");
-    const staticItem = headerData[0]; 
-    
+    const staticItem = headerData[0];
+
     if (!staticItem) return;
 
     const contentHTML = `
@@ -160,8 +160,8 @@ function renderStaticContent() {
     `;
 
     mainContainer.innerHTML = contentHTML;
-    
-   
+
+
     initializeImageSlider();
 }
 
@@ -171,41 +171,41 @@ function showImages(n) {
     const largePlant = document.getElementById("large-plant");
     const dots = document.getElementsByClassName("dot");
 
-   
+
     if (!smallPlant || !largePlant) return;
 
-    
-    if (n >= headerData.length) {imageIndex = 0;}    
-    if (n < 0) {imageIndex = headerData.length - 1;}
 
-    
+    if (n >= headerData.length) { imageIndex = 0; }
+    if (n < 0) { imageIndex = headerData.length - 1; }
+
+
     const currentImages = headerData[imageIndex];
 
-    
+
     smallPlant.classList.remove('fade');
     largePlant.classList.remove('fade');
     void smallPlant.offsetWidth;
-    void largePlant.offsetWidth; 
+    void largePlant.offsetWidth;
 
-    
+
     smallPlant.src = currentImages.small;
     largePlant.src = currentImages.large;
 
-   
+
     smallPlant.classList.add('fade');
     largePlant.classList.add('fade');
 
-  
+
     for (let i = 0; i < dots.length; i++) {
         dots[i].className = dots[i].className.replace(" active", "");
     }
     dots[imageIndex].className += " active";
 
-    
+
     clearTimeout(autoSlideTimeout);
     autoSlideTimeout = setTimeout(() => {
-        plusImages(1); 
-    }, 4000); 
+        plusImages(1);
+    }, 4000);
 }
 
 
@@ -224,14 +224,14 @@ function initializeImageSlider() {
     const dotsContainer = document.getElementById("dots-container");
     let dotsHTML = "";
 
-   
+
     headerData.forEach((_, index) => {
         dotsHTML += `<span class="dot" onclick="currentImage(${index})"></span>`;
     });
 
     dotsContainer.innerHTML = dotsHTML;
 
-    
+
     showImages(imageIndex);
 }
 
@@ -252,7 +252,7 @@ const productsData = [
         id: 1,
         title: "Barberton Daisy",
         text: "$119.00",
-         img : "images/a.png", 
+        img: "images/a.png",
         isSale: false
     },
     {
@@ -283,35 +283,35 @@ const productsData = [
         id: 5,
         title: "Blushing Bromeliad",
         text: "$139.00",
-       img: "images/e.png",
+        img: "images/e.png",
         isSale: false
     },
     {
         id: 6,
         title: "Aluminum Plant",
-       text: "$179.00",
+        text: "$179.00",
         img: "images/f.png",
         isSale: false
     },
-     {
+    {
         id: 7,
         title: "Bird's Nest Fern",
         text: "$99.00",
         img: "images/g.png",
         isSale: false
     },
-     {
+    {
         id: 8,
         title: "Broadleaf Lady Palm",
         text: "$59.00",
         img: "images/h.png",
         isSale: false
     },
-     {
+    {
         id: 9,
-       title: "Chinese Evergreen",
+        title: "Chinese Evergreen",
         text: "$39.00",
-       img: "images/i.png",
+        img: "images/i.png",
         isSale: false
     },
 
@@ -331,13 +331,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const productList = document.getElementById('main__list');
 
-  
+
     function createProductItem(product) {
         const li = document.createElement('li');
         li.className = 'product-item';
-        
+
         let priceHtml = `<p class="product__text">$${product.text}</p>`;
-        
+
         if (product.isSale && product.oldPrice) {
             priceHtml = `
                 <p class="product__text">$${product.text}
@@ -382,13 +382,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-   
+
     renderProducts(productsData);
 
-  
+
     const priceSlider = document.querySelector('.slider');
     const currentPriceDisplay = document.getElementById('current-price');
-    
+
     if (priceSlider) {
         priceSlider.addEventListener('input', (e) => {
             const minPrice = 39;
@@ -402,32 +402,32 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             tabs.forEach(t => t.classList.remove('active'));
             tab.classList.add('active');
-            
-            
+
+
             if (tab.textContent === 'Sale') {
                 const saleProducts = productsData.filter(p => p.isSale);
                 renderProducts(saleProducts);
             } else if (tab.textContent === 'New Arrivals') {
-                
-                renderProducts(productsData.slice(0, 3)); 
+
+                renderProducts(productsData.slice(0, 3));
             } else {
                 renderProducts(productsData);
             }
         });
     });
 
- 
+
     const sortSelect = document.getElementById('sort');
     if (sortSelect) {
-        sortSelect.addEventListener('change', function() {
+        sortSelect.addEventListener('change', function () {
             let sortedProducts = [...productsData];
-            
+
             if (this.value === 'Price: Low to High') {
                 sortedProducts.sort((a, b) => parseFloat(a.text) - parseFloat(b.text));
             } else {
                 sortedProducts = productsData;
             }
-            
+
             renderProducts(sortedProducts);
         });
     }
@@ -437,11 +437,11 @@ document.addEventListener('DOMContentLoaded', () => {
         item.addEventListener('click', () => {
             categoryItems.forEach(i => i.style.backgroundColor = '');
             categoryItems.forEach(i => i.style.color = '');
-            
+
             item.style.backgroundColor = 'rgba(46, 204, 113, 0.1)';
             item.style.color = 'var(--primary-color)';
-            
-            
+
+
         });
     });
 
@@ -454,8 +454,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 return price <= currentPrice;
             });
             renderProducts(filteredProducts);
-            
-           
+
+
             filterBtn.style.transform = 'scale(0.95)';
             setTimeout(() => {
                 filterBtn.style.transform = '';
@@ -496,11 +496,11 @@ function addCactus() {
                          </span>
                     </li>
                   `;
-                 
-                  
+
+
     });
 
-     document.getElementById("article__list").innerHTML = result;
+    document.getElementById("article__list").innerHTML = result;
 
 };
 addCactus();
@@ -522,21 +522,21 @@ const addSection = [
         text: "Cacti are succulents are easy care <br> plants for any home or patio. ",
         link: "Read More"
     },
-     {
+    {
         img: "images/k.png",
         septrmber: "September 13  I Read in 2 minutes",
         subtitle: "Top 10 Succulents for <br> Your Home",
         text: "Best in hanging baskets. Prefers <br> medium to high light.",
         link: "Read More"
     },
-     {
+    {
         img: "images/l.png",
         septrmber: "September 15  I Read in 3 minutes",
         subtitle: "Cacti & Succulent <br> Care Tips",
         text: "Cacti and succulents thrive in <br> containers and because most are.. ",
         link: "Read More"
     },
-     {
+    {
         img: "images/m.png",
         septrmber: "September 15  I Read in 2 minutes",
         subtitle: "Best Houseplants <br> Room by Room",
@@ -598,9 +598,9 @@ const addAside = [
 
 ];
 
-function addCard(){
+function addCard() {
     let result = "";
-    addAside.forEach((aside, index) =>{
+    addAside.forEach((aside, index) => {
         result += `
             <li class="aside__item">
                 ${aside.img ? `<img class="aside__img" src="${aside.img}" alt="">` : ''}
@@ -634,9 +634,9 @@ const addFooter = [
     }
 ];
 
-function addLokatsiya(){
+function addLokatsiya() {
     let result = "";
-    addFooter.forEach((footer) =>{
+    addFooter.forEach((footer) => {
         result += `
             <li class="footer__item">
                 <img class="footer__img" src="${footer.img}" alt="Logo">
@@ -706,11 +706,11 @@ function renderFooter() {
     addLink.forEach(item => {
         result += `<div class="footer__box">
             <h3 class = "title">${item.title}</h3>
-            <ul>`; 
+            <ul>`;
 
         if (item.links) {
             item.links.forEach(link => {
-               
+
                 result += `<li><a class = "link" href="#">${link}</a></li>`;
             });
         }
@@ -727,19 +727,10 @@ function renderFooter() {
             result += `<img class="pay-img" src="${item.img}" alt="">`;
         }
 
-        result += `</ul></div>`; 
+        result += `</ul></div>`;
     });
 
     document.getElementById("footer__list").innerHTML = result;
 }
 
 renderFooter();
-
-
-
-
- 
-
-
-
-
