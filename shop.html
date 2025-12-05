@@ -29,10 +29,15 @@
     </nav>
 
     <script>
-        const navigation = [
+         const navigation = [
             {
 
-                links: ["Home", "Shop", "Plant Care", "Blogs"],
+                links: [
+                    { name: "Home", href: "index.html" },
+                    { name: "Shop", href: "shop.html" },
+                    { name: "Plant Care", href: "plant-care.html" },
+                    { name: "Blogs", href: "blogs.html" }
+                ],
                 button: "Login",
                 bars: "fa-solid fa-bars"
             }
@@ -45,7 +50,7 @@
                 item.links.forEach(link => {
                     result += `
                         <li class="nav__item">
-                            <a href="#">${link}</a>
+                            <a href="${link.href}">${link.name}</a>
                         </li>
                     `;
                 });
@@ -131,6 +136,7 @@
                 document.body.style.overflow = "";
             }
         });
+    </script>
 
     </script>
 
